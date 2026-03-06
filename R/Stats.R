@@ -167,7 +167,7 @@ fun_stats<-function(){
                         Percentage=c(sum(stats$firsttime)/nrow(stats),
                                      sum(stats$firsttime[-nrow(stats)])/(nrow(stats)-1),
                                      sum(FunStats$firsttime)/nrow(FunStats)))
-  firsttime$Percentage<-paste0(firsttime$Percentage*100,"%")
+  firsttime$Percentage<-paste0(round(firsttime$Percentage*100,2),"%")
   rownames(firsttime)=c("Current","Before","All cases")
   #Print first time
   print("FIRST TIME")
