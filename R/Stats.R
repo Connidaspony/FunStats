@@ -17,10 +17,12 @@ fun_stats<-function(){
   }
   years_c<-sapply(d, `[`, 3)
   #Bind years into matrix
-  year<-rbind(summary(as.factor(years)),
-              summary(as.factor(years[-length(years)])),
-              summary(as.factor(years_c)))
-  row.names(year)<-c("Current","Before","All cases")
+  year<-matrix(0,3,length(unique(years_c)))
+  year[1,1:length(unique(years))]<-summary(as.factor(years))
+  year[2,1:length(unique(years[-length(years)]))]<-summary(as.factor(years[-length(years)]))
+  year[3,]<-summary(as.factor(years_c))
+  colnames(year)<-unique(years_c)
+  rownames(year)<-c("Current","Before","All cases")
   #Print year stats
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   print("YEAR")
