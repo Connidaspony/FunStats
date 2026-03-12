@@ -98,5 +98,3 @@ fun_stats_weighted<-function(){
   print(summary(context))
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 }
-
-fun_stats_weighted()
