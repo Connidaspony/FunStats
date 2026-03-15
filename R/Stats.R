@@ -206,10 +206,23 @@ fun_stats<-function(){
                 max(FunStats$times)),
               3,4,byrow=TRUE)
   times<-round(times,2)
-  colnames(times)=c("Mean","SDev","Lowest","Highest")
-  rownames(times)=c("Current","Before","All cases")
+  colnames(times)<-c("Mean","SDev","Lowest","Highest")
+  rownames(times)<-c("Current","Before","All cases")
   #Print time stats
   print("TIMES")
   print(times)
+  print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+  #Total number
+  #Create matrix
+  total<-matrix(c(sum(stats$times),
+                  sum(stats$times[-nrow(stats)]),
+                  sum(FunStats$times)),
+                3,1)
+  rownames(total)<-c("Current","Before","All cases")
+  colnames(total)<-"Count"
+  #Print total stats
+  print("Total times")
+  print(total)
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 }
