@@ -59,6 +59,9 @@ plot_age<-function(weighted=FALSE){
   FunStats<-FunStats[FunStats$sex==TRUE,]
   if(weighted==TRUE){
     FunStats<-uncount(FunStats,times)
+    yscale<-10
+  }else{
+    yscale<-1
   }
   m<-mean(FunStats$age)
   s<-sd(FunStats$age)
@@ -72,7 +75,7 @@ plot_age<-function(weighted=FALSE){
     ylab("Count")+
     scale_x_continuous(breaks=seq(min(FunStats$age),
                                   max(FunStats$age),1))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$age))),1))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$age))),yscale))+
     theme_test()+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="orange"))
@@ -104,6 +107,9 @@ plot_agegap<-function(weighted=FALSE){
   FunStats<-FunStats[FunStats$sex==TRUE,]
   if(weighted==TRUE){
     FunStats<-uncount(FunStats,times)
+    yscale<-10
+  }else{
+    yscale<-1
   }
   m<-mean(FunStats$agegap)
   s<-sd(FunStats$agegap)
@@ -117,7 +123,7 @@ plot_agegap<-function(weighted=FALSE){
     xlab("Age Gap")+
     ylab("Count")+
     scale_x_continuous(breaks=seq(-h,h,1),limits=c(-h-1,h+1))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$agegap))),1))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$agegap))),yscale))+
     theme_test()+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="darkblue"),
@@ -194,6 +200,9 @@ plot_cupsize<-function(weighted=FALSE){
   FunStats<-FunStats[FunStats$sex==TRUE,]
   if(weighted==TRUE){
     FunStats<-uncount(FunStats,times)
+    yscale<-10
+  }else{
+    yscale<-1
   }
   m<-mean(FunStats$cupsize)
   s<-sd(FunStats$cupsize)
@@ -208,7 +217,7 @@ plot_cupsize<-function(weighted=FALSE){
     scale_x_continuous(breaks=seq(0,max(FunStats$cupsize),1),
                        limits=c(-1,max(FunStats$cupsize)+1),
                        labels=c("AA",LETTERS[1:max(FunStats$cupsize)]))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$cupsize))),1))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$cupsize))),yscale))+
     theme_test(ink="white")+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="purple"),
