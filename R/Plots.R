@@ -11,11 +11,16 @@ plot_date<-function(){
 }
 
 
-plot_country<-function(){
+plot_country<-function(weighted=FALSE){
   require(forcats)
   require(ggplot2)
-  f<-fct_infreq(fct_inorder(as.factor(FunStats$country[FunStats$sex==TRUE])))
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=factor(country,levels=levels(f))))+
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
+  f<-fct_infreq(fct_inorder(as.factor(FunStats$country)))
+  p<-ggplot(FunStats,aes(x=factor(country,levels=levels(f))))+
     geom_bar(fill="red")+
     labs(title="Frequency of countries")+
     xlab("Country")+
@@ -27,11 +32,16 @@ plot_country<-function(){
 }
 
 
-plot_ethnicity<-function(){
+plot_ethnicity<-function(weighted=FALSE){
   require(forcats)
   require(ggplot2)
-  f<-fct_infreq(fct_inorder(as.factor(FunStats$ethnicity[FunStats$sex==TRUE])))
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=factor(ethnicity,levels=levels(f))))+
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
+  f<-fct_infreq(fct_inorder(as.factor(FunStats$ethnicity)))
+  p<-ggplot(FunStats,aes(x=factor(ethnicity,levels=levels(f))))+
     geom_bar(fill="orange")+
     labs(title="Frequency of ethnicities")+
     xlab("Ethnicity")+
@@ -43,21 +53,26 @@ plot_ethnicity<-function(){
 }
 
 
-plot_age<-function(){
+plot_age<-function(weighted=FALSE){
   require(ggplot2)
-  m<-mean(FunStats$age[FunStats$sex==TRUE])
-  s<-sd(FunStats$age[FunStats$sex==TRUE])
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=age))+
-    geom_histogram(bins=diff(range(FunStats$age[FunStats$sex==TRUE])),
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
+  m<-mean(FunStats$age)
+  s<-sd(FunStats$age)
+  p<-ggplot(FunStats,aes(x=age))+
+    geom_histogram(bins=diff(range(FunStats$age)),
                    fill="lightblue",colour="black")+
     geom_vline(xintercept=m,colour="red",lwd=2)+
     geom_segment(x=m-s,y=0,xend=m+s,yend=0,colour="red",lwd=1)+
     labs(title="Age distribution")+
     xlab("Age")+
     ylab("Count")+
-    scale_x_continuous(breaks=seq(min(FunStats$age[FunStats$sex==TRUE]),
-                                  max(FunStats$age[FunStats$sex==TRUE]),1))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$age[FunStats$sex==TRUE]))),1))+
+    scale_x_continuous(breaks=seq(min(FunStats$age),
+                                  max(FunStats$age),1))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$age))),1))+
     theme_test()+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="orange"))
@@ -83,13 +98,18 @@ plot_age_time<-function(){
 }
 
 
-plot_agegap<-function(){
+plot_agegap<-function(weighted=FALSE){
   require(ggplot2)
-  m<-mean(FunStats$agegap[FunStats$sex==TRUE])
-  s<-sd(FunStats$agegap[FunStats$sex==TRUE])
-  h<-max(c(-min(FunStats$agegap[FunStats$sex==TRUE]),
-           max(FunStats$agegap[FunStats$sex==TRUE])))
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=agegap))+
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
+  m<-mean(FunStats$agegap)
+  s<-sd(FunStats$agegap)
+  h<-max(c(-min(FunStats$agegap),
+           max(FunStats$agegap)))
+  p<-ggplot(FunStats,aes(x=agegap))+
     geom_histogram(bins=h*2+3,fill="purple",colour="black")+
     geom_vline(xintercept=m,colour="red",lwd=2)+
     geom_segment(x=m-s,y=0,xend=m+s,yend=0,colour="red",lwd=1)+
@@ -97,7 +117,7 @@ plot_agegap<-function(){
     xlab("Age Gap")+
     ylab("Count")+
     scale_x_continuous(breaks=seq(-h,h,1),limits=c(-h-1,h+1))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$agegap[FunStats$sex==TRUE]))),1))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$agegap))),1))+
     theme_test()+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="darkblue"),
@@ -126,10 +146,15 @@ plot_agegap_time<-function(){
 }
 
 
-plot_gender<-function(){
+plot_gender<-function(weighted=FALSE){
   require(ggplot2)
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
   l<-c("Woman","Woman-adjacent","Non-binary","Man-adjacent","Man")
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=factor(gender,levels=l)))+
+  p<-ggplot(FunStats,aes(x=factor(gender,levels=l)))+
     geom_bar(fill="yellow")+
     labs(title="Frequency of genders")+
     xlab("Gender")+
@@ -142,10 +167,15 @@ plot_gender<-function(){
 }
 
 
-plot_genitals<-function(){
+plot_genitals<-function(weighted=FALSE){
   require(ggplot2)
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
   l<-c("Vulva","Penis","Other")
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=factor(genitals,levels=l)))+
+  p<-ggplot(FunStats,aes(x=factor(genitals,levels=l)))+
     geom_bar(fill="white")+
     labs(title="Frequency of genitals")+
     xlab("Genitals")+
@@ -158,22 +188,27 @@ plot_genitals<-function(){
 }
 
 
-plot_cupsize<-function(){
+plot_cupsize<-function(weighted=FALSE){
   require(ggplot2)
-  m<-mean(FunStats$cupsize[FunStats$sex==TRUE])
-  s<-sd(FunStats$cupsize[FunStats$sex==TRUE])
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=cupsize))+
-    geom_histogram(bins=max(FunStats$cupsize[FunStats$sex==TRUE])+3,
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
+  m<-mean(FunStats$cupsize)
+  s<-sd(FunStats$cupsize)
+  p<-ggplot(FunStats,aes(x=cupsize))+
+    geom_histogram(bins=max(FunStats$cupsize)+3,
                    fill="green",colour="white")+
     geom_vline(xintercept=m,colour="blue",lwd=2)+
     geom_segment(x=m-s,y=0,xend=m+s,yend=0,colour="blue",lwd=1)+
     labs(title="Cup size distribution")+
     xlab("Cup Size")+
     ylab("Count")+
-    scale_x_continuous(breaks=seq(0,max(FunStats$cupsize[FunStats$sex==TRUE]),1),
-                       limits=c(-1,max(FunStats$cupsize[FunStats$sex==TRUE])+1),
-                       labels=c("AA",LETTERS[1:max(FunStats$cupsize[FunStats$sex==TRUE])]))+
-    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$cupsize[FunStats$sex==TRUE]))),1))+
+    scale_x_continuous(breaks=seq(0,max(FunStats$cupsize),1),
+                       limits=c(-1,max(FunStats$cupsize)+1),
+                       labels=c("AA",LETTERS[1:max(FunStats$cupsize)]))+
+    scale_y_continuous(breaks=seq(0,max(summary(as.factor(FunStats$cupsize))),1))+
     theme_test(ink="white")+
     theme(panel.grid=element_blank(),
           panel.background=element_rect(fill="purple"),
@@ -218,10 +253,15 @@ plot_firsttime<-function(){
 }
 
 
-plot_context<-function(){
+plot_context<-function(weighted=FALSE){
   require(ggplot2)
+  require(tidyr)
+  FunStats<-FunStats[FunStats$sex==TRUE,]
+  if(weighted==TRUE){
+    FunStats<-uncount(FunStats,times)
+  }
   l<-c("Intimate","Exploratory","Casual","One-Night-Stand","Professional")
-  p<-ggplot(FunStats[FunStats$sex==TRUE,],aes(x=factor(context,levels=l)))+
+  p<-ggplot(FunStats,aes(x=factor(context,levels=l)))+
     geom_bar(fill="red")+
     labs(title="Frequency of contexts")+
     xlab("Context")+
